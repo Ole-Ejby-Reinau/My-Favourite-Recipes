@@ -8,8 +8,8 @@
 
 import UIKit
 
-struct RecipeModel: Identifiable, Codable {
-    
+struct RecipeModel: Identifiable, Codable
+{
     var id = UUID()
     var name = ""
     var origin = ""
@@ -18,13 +18,15 @@ struct RecipeModel: Identifiable, Codable {
     var ingredients = [String]()
     var recipe = ""
     var imageData: Data?
-    var image: UIImage {
-        if let dataImage = UIImage(data: imageData ?? Data()) {
+    var image: UIImage
+    {
+        if let dataImage = UIImage(data: imageData ?? Data())
+        {
             return dataImage
-        } else if let countryImage = UIImage(named: countryCode) {
+        } else if let countryImage = UIImage(named: countryCode)
+        {
             return countryImage
         }
         return UIImage()
-    }
-        
+    }        
 }

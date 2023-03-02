@@ -8,28 +8,31 @@
 
 import SwiftUI
 
-struct RecipeDetailView: View {
-    
+struct RecipeDetailView: View
+{
     @State var recipe: RecipeModel!
     @State private var viewIndex = 0
     
-    private var isFavourite: Bool {
+    private var isFavourite: Bool
+    {
         return recipe.favourite
     }
     
     @EnvironmentObject var appData: AppData
 
-    var body: some View {
+    var body: some View
+    {
         // VStack so we can list our components vertically
-        VStack(alignment: .leading, spacing: 15) {
-            
+        VStack(alignment: .leading, spacing: 15)
+        {
             // Image (currently using flag)
             Image(uiImage: recipe.image)
                 .resizable()
                 .aspectRatio(contentMode: .fit)
                 .frame(maxWidth: .infinity, maxHeight: 200)
             
-            HStack {
+            HStack
+            {
                 // Name of our recipe
                 Text("\(recipe.name)")
                     .font(.title)
@@ -37,11 +40,13 @@ struct RecipeDetailView: View {
                     .foregroundColor(self.appData.fontColor)
                 
                 // Favourites Button
-                Button(action: {
+                Button(action:
+                {
                     self.appData.fontColor = self.isFavourite ? .orange : .black
                     self.recipe.favourite.toggle()
                     self.appData.updateRecipe(recipe: self.recipe)
-                }) {
+                })
+                {
                     Image(systemName: isFavourite ? "star.fill" : "star")
                 }
                 
@@ -54,19 +59,23 @@ struct RecipeDetailView: View {
             
         
             // Picker to choose between Igredients & Recipe
-            Picker(selection: $viewIndex, label: Text("")) {
+            Picker(selection: $viewIndex, label: Text(""))
+            {
                 Text("Ingredients").tag(0)
                 Text("Recipe").tag(1)
-            }.pickerStyle(SegmentedPickerStyle())
+            }
+            .pickerStyle(SegmentedPickerStyle())
             
             // Logic to determin which Picker View to show.
             if viewIndex == 0 {
-                List(recipe.ingredients, id: \.self) { ingredient in
+                List(recipe.ingredients, id: \.self)
+                { ingredient in
                     Image(systemName: "hand.point.right")
                     Text(ingredient)
                 }
                 .listStyle(GroupedListStyle())
-            } else if viewIndex == 1 {
+            } else if viewIndex == 1
+            {
                 Text(recipe.recipe)
                     .padding(15)
                     .multilineTextAlignment(.leading)
@@ -76,9 +85,11 @@ struct RecipeDetailView: View {
     }
 }
 
-struct RecipeDetailView_Previews: PreviewProvider {
+struct RecipeDetailView_Previews: PreviewProvider
+{
     static let appData = AppData()
-    static var previews: some View {
+    static var previews: some View
+    {
         RecipeDetailView(recipe: Helper.mockRecipes().first!).environmentObject(appData)
     }
 }

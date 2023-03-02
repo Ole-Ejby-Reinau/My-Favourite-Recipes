@@ -8,13 +8,16 @@
 
 import SwiftUI
 
-struct RecipeView: View {
+struct RecipeView: View
+{
     @State var recipe = RecipeModel()
     
-    var body: some View {
-                
-        Group {
-            VStack(alignment: .leading) {
+    var body: some View
+    {
+        Group
+        {
+            VStack(alignment: .leading)
+            {
                 Text("\(recipe.name)")
                     .font(.headline)
                     .foregroundColor(Color.blue)
@@ -27,10 +30,13 @@ struct RecipeView: View {
     }
 }
 
-struct RecipieView_Previews: PreviewProvider {
-    static var previews: some View {
+struct RecipieView_Previews: PreviewProvider
+{
+    static var previews: some View
+    {
         let mockRecipes = Helper.mockRecipes()
-        return List(mockRecipes) { recipe in
+        return List(mockRecipes)
+        { recipe in
             RecipeView(recipe: recipe)
         }
     }

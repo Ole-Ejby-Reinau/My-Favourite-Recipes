@@ -9,9 +9,8 @@
 import SwiftUI
 
 
-struct AddRecipeView: View {
-    
-    
+struct AddRecipeView: View
+{
     @State internal var recipeName: String = ""
     @State internal var ingredient: String = ""
     
@@ -24,7 +23,8 @@ struct AddRecipeView: View {
     
     @State private var selectedCountry = 0
     
-    var placeHolderImageName: String {
+    var placeHolderImageName: String
+    {
         return UIDevice.current.userInterfaceIdiom == .pad ? "placeholder-add-image_iPad" : "placeholder-add-image"
     }
     
@@ -37,13 +37,17 @@ struct AddRecipeView: View {
     }
     
     
-    var body: some View {
-        
-        NavigationView {
-            Form {
-                Button(action: {
+    var body: some View
+    {
+        NavigationView
+        {
+            Form
+            {
+                Button(action:
+                {
                     self.showingImagePicker.toggle()
-                }) {
+                })
+                {
                     Image(uiImage: self.libraryImage ?? (UIImage(named: "placeholder-add-image") ?? UIImage()))
                         .resizable()
                         .aspectRatio(contentMode: .fit)
@@ -52,22 +56,34 @@ struct AddRecipeView: View {
                         .frame(maxWidth: .infinity, maxHeight: 230)
                         .padding(6)
                 }
-                .sheet(isPresented: $showingImagePicker) {
+                .sheet(isPresented: $showingImagePicker)
+                {
                     ImagePicker(image: self.$libraryImage)
-                }.buttonStyle(PlainButtonStyle())
-                Section(header: Text("Add Recipe Name:")) {
+                }
+                .buttonStyle(PlainButtonStyle())
+                
+                Section(header: Text("Add Recipe Name:"))
+                {
                     TextField("enter recipe name", text: $recipeName)
                 }
-                Section(header: Text("Add Ingredient:")) {
+                
+                Section(header: Text("Add Ingredient:"))
+                {
                     TextField("enter ingredient name", text: $ingredient)
                         .modifier(AddButton(text: $ingredient, ingredients: $ingredients))
                 }
-                if ingredients.count > 0 {
-                    Section(header: Text("Current Ingredients:")) {
-                        List(ingredients, id: \.self) { item in
-                            Button(action: {
+                
+                if ingredients.count > 0
+                {
+                    Section(header: Text("Current Ingredients:"))
+                    {
+                        List(ingredients, id: \.self)
+                        { item in
+                            Button(action:
+                            {
                                 self.ingredients.removeAll { $0 == item }
-                            }) {
+                            })
+                            {
                                 Image(systemName: "minus")
                                     .foregroundColor(Color(UIColor.opaqueSeparator))
                             }
@@ -81,9 +97,13 @@ struct AddRecipeView: View {
                     TextView(text: $recipeDetails)
                         .frame(height: 220)
                 }
-                Section(header: Text("Country of Origin:")) {
-                    Picker(selection: $selectedCountry, label: Text("Country")) {
-                        ForEach(0 ..< countries.count) {
+                
+                Section(header: Text("Country of Origin:"))
+                {
+                    Picker(selection: $selectedCountry, label: Text("Country"))
+                    {
+                        ForEach(0 ..< countries.count)
+                        {
                             Text(self.countries[$0]).tag($0)
                                 .font(.headline)
                         }
@@ -92,38 +112,44 @@ struct AddRecipeView: View {
             } // Closing Form Brace
                 .navigationBarTitle("Add Recipe")
                 .navigationBarItems(leading:
-                    Button(action: {
+                    Button(action:
+                    {
                         self.getRandomImage()
-                    }) {
+                    })
+                    {
                         Text("Random Image")
                     }, trailing:
-                    Button(action: {
+                    Button(action:
+                    {
                         self.saveRecipe()
                         self.presentationMode.wrappedValue.dismiss()
-                    }) {
+                    })
+                    {
                         Text("Save")
                     }
             )
-        }.navigationViewStyle(StackNavigationViewStyle())
-        
+        }
+        .navigationViewStyle(StackNavigationViewStyle())
     }
     
-    private func getRandomImage() {
-        
-        guard let url = URL(string: "https://source.unsplash.com/300x200/?food") else {
+    private func getRandomImage()
+    {
+        guard let url = URL(string: "https://source.unsplash.com/300x200/?food") else
+        {
             return
         }
         
-        NetworkHelper.loadData(url: url) { (image) in
+        NetworkHelper.loadData(url: url)
+        { (image) in
             self.libraryImage = image
         }
-        
     }
     
-    private func saveRecipe() {
-        
+    private func saveRecipe()
+    {
         var recipeImage = UIImage()
-        if let libImage = libraryImage {
+        if let libImage = libraryImage
+        {
             recipeImage = libImage
         }
         
@@ -141,26 +167,28 @@ struct AddRecipeView: View {
         // Update Local Saved Data
         self.appData.recipes.append(newRecipe)
         Helper.saveRecipes(recipes: self.appData.recipes)
-        
     }
-    
 }
 
-struct AddButton: ViewModifier {
-    
+struct AddButton: ViewModifier
+{
     @Binding var text: String
     @Binding var ingredients: [String]
     
-    public func body(content: Content) -> some View {
-        
-        ZStack(alignment: .trailing) {
+    public func body(content: Content) -> some View
+    {
+        ZStack(alignment: .trailing)
+        {
             content
-            Button(action: {
-                if self.text != "" {
+            Button(action:
+            {
+                if self.text != ""
+                {
                     self.ingredients.append(self.text)
                     self.text = ""
                 }
-            }) {
+            })
+            {
                 Image(systemName: "plus")
                     .foregroundColor(Color(UIColor.opaqueSeparator))
             }
@@ -170,8 +198,10 @@ struct AddButton: ViewModifier {
     }
 }
 
-struct AddRecipeView_Previews: PreviewProvider {
-    static var previews: some View {
+struct AddRecipeView_Previews: PreviewProvider
+{
+    static var previews: some View
+    {
         let recipe = Helper.mockRecipes().first!
         return AddRecipeView(recipeName: recipe.name, ingredient: recipe.ingredients.first ?? "", ingredients: recipe.ingredients, recipeDetails: recipe.recipe)
     }
